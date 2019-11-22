@@ -6,17 +6,18 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.exercise.ui.login.LoginActivity;
+
 public class MainActivity extends AppCompatActivity {
-
-
+    //{"key":"value","key":"value"}
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
     }
 
-    public void btn1 (View v){
-        Intent intent = new Intent(getApplicationContext(),page2.class);
+    public void btn_login(View v){
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
     }
 

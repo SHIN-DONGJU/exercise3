@@ -1,3 +1,105 @@
 <resources>
     <string name="app_name">exercise</string>
+    <string name="login">LOGIN</string>
+    <string name="start">START</string>
+    <string name="title_activity_login">Sign in</string>
+    <string name="prompt_name">Name</string>
+    <string name="prompt_password">Password</string>
+    <string name="prompt_spinner">Select</string>
+    <string name="action_sign_in">Sign in or Register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    // kakao 지도
+    <string name="app_name_map">DaumMapApiDemos</string>
+
+    <string name="map_view_demo_title">MapView</string>
+    <string name="map_view_demo_desc">기본 맵뷰, 타일 종류</string>
+
+    <string name="marker_demo_title">Markers</string>
+    <string name="marker_demo_desc">기본 마커, 커스텀 마커, 마커 동작</string>
+
+    <string name="polygon_demo_title">Polyline, Polygon</string>
+    <string name="polygon_demo_desc">지도 위 그래픽 요소 그리기</string>
+
+    <string name="location_demo_title">Location</string>
+    <string name="location_demo_desc">위치 관련 API</string>
+
+    <string name="camera_demo_title">Camera</string>
+    <string name="camera_demo_desc">카메라 관련 API</string>
+
+    <string name="events_demo_title">Events</string>
+    <string name="events_demo_desc">지도 이벤트</string>
+
+    <string name="search_demo_title">Search</string>
+    <string name="search_demo_desc">키워드 장소검색</string>
+
+    <string name="no_demos">No demos</string>
+
+    <string name="press_menu">Menu 버튼을 누르세요.</string>
+
+    <string name="demo_events_help">지도뷰를 탭, 길게 탭, 드래그 하세요.</string>
+
+    <string name="go_to_hannam">Go to Hannam</string>
+    <string name="go_to_pangyo">Go to Pangyo</string>
+
+    // tmap
+    <string name="overlay">overlay</string>
+    <string name="animateTo">animateTo</string>
+    <string name="aroundus">광고</string>
+
+    <string name="setCenterPoint">Set Center Point</string>
+    <string name="setLocationPoint">Set Location Point</string>
+    <string name="getLocationPoint">Get Location Point</string>
+
+    <string name="setIcon">아이콘 설정</string>
+    <string name="setCompassMode">나침반 모드 설정</string>
+    <string name="getIsCompass">나침반 모드 사용여부</string>
+
+    <string name="zoomIn">줌 In</string>
+    <string name="zoomOut">줌 Out</string>
+    <string name="getZoomLevel">현재 줌 레벨</string>
+
+    <string name="setZoomLevel">줌 레벨 선택</string>
+    <string name="setMapType">지도 타입 선택</string>
+
+    <string name="getCenterPoint">화면 중심좌표</string>
+
+    <string name="setsightvisible">시야표출여부</string>
+    <string name="setTrackingMode">트래킹모드 설정</string>
+    <string name="getIstracking">트래킹모드 사용여부</string>
+
+    <string name="addCircle">서클 추가</string>
+    <string name="removeCircle">서클 제거</string>
+
+    <string name="drawLine">선 그리기</string>
+    <string name="eraseLine">선 지우기</string>
+    <string name="linesize">선 사이즈</string>
+
+    <string name="drawPolygon">폴리곤 그리기</string>
+    <string name="erasePolygon">폴리곤 지우기</string>
+
+    <string name="draw_map_path">경로</string>
+    <string name="remove_map_path">경로 제거</string>
+    <string name="displaymapinfo">Display Map Info</string>
+    <string name="naviguide">길안내</string>
+
+    <string name="car_path">자동차경로</string>
+    <string name="pedestrian_path">보행자경로</string>
+
+    <string name="showmarker2">마커 2</string>
+
+    <string name="showmarker">마커 표출</string>
+    <string name="removemarker">마커 제거</string>
+
+    <string name="movefrontmarker">맨 앞으로 마커이동</string>
+    <string name="movetomarker">맨 뒤로 마커이동</string>
+
+    <string name="findallpoi">통합검색</string>
+    <string name="convertToAddress">주소변환</string>
+    <string name="getAroundBizPoi">주변업종검색</string>
+
 </resources>

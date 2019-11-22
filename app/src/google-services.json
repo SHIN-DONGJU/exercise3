@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1079293886026",
+    "firebase_url": "https://chat-d5217.firebaseio.com",
+    "project_id": "chat-d5217",
+    "storage_bucket": "chat-d5217.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1079293886026:android:9bf5d28a9618509bf0b0b3",
+        "android_client_info": {
+          "package_name": "com.example.exercise"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1079293886026-mn6r09o0euh5kcbg2oeq1bsj4iidfnlg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB04m-B4Ad2iVsTeVmTYn7c6GLyCOJKQAg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1079293886026-mn6r09o0euh5kcbg2oeq1bsj4iidfnlg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
