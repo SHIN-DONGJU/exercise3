@@ -1,5 +1,6 @@
 package com.example.exercise;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
+
 public class Page4 extends AppCompatActivity implements RecyclerViewAdapterCallback {
 
     private EditText editText;
@@ -22,10 +25,16 @@ public class Page4 extends AppCompatActivity implements RecyclerViewAdapterCallb
     private Handler handler = new Handler(Looper.getMainLooper());
     private Runnable workRunnable;
     private final long DELAY = 500;
+    //ArrayList<String> LISTNAVI=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //Intent intent = getIntent();
+        //LISTNAVI=intent.getExtras().getStringArrayList("description");
+        //System.out.println("page4에서" + LISTNAVI.get(0));
+
         setContentView(R.layout.activity_page4);
         layoutInit();
 

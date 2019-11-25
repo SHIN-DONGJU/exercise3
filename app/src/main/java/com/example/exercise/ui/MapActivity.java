@@ -18,12 +18,23 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.exercise.GestureActivity;
 import com.example.exercise.LogManager;
+import com.example.exercise.MainActivity;
 import com.example.exercise.Page4;
 import com.example.exercise.R;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textview.MaterialAutoCompleteTextView;
+import com.google.android.material.textview.MaterialTextView;
 import com.skt.Tmap.BizCategory;
 import com.skt.Tmap.TMapCircle;
 import com.skt.Tmap.TMapData;
@@ -52,21 +63,32 @@ import com.skt.Tmap.TMapView.TMapLogoPositon;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathFactory;
 
 public class MapActivity extends BaseActivity implements onLocationChangedCallback
 {
 	PermissionManager permissionManager = null; // 권한요청 관리자
 
+	//TMapGpsManager Tmapgps = new TMapGpsManager(this);
+
 	@Override
 	public void onLocationChange(Location location) {
+
 		LogManager.printLog("onLocationChange :::> " + location.getLatitude() +  " " + location.getLongitude() + " " + location.getSpeed() + " " + location.getAccuracy());
 		if(m_bTrackingMode) 
 		{
@@ -81,8 +103,9 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	private ImageOverlay mOverlay;
 
 	public static String mApiKey = "32e67b95-524c-44c7-93ec-d51f7efb67dd"; // 발급받은 SKT AppKey
-	
-	private static final int[] mArrayMapButton = {
+
+
+	private static final int[] mArrayMapButton2 = {
 		R.id.btnOverlay,
 		R.id.btnAnimateTo,
 		R.id.btnZoomIn,
@@ -138,7 +161,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	private 	boolean 	m_bSightVisible = false;
 
 	//트렉킹 시작
-	private 	boolean 	m_bTrackingMode = true;
+	private 	boolean 	m_bTrackingMode = false;
 	
 	private 	boolean 	m_bOverlayMode = false;
 	
@@ -156,11 +179,12 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	ArrayList<String>       mArrayMarkerID;
 	private static int 		mMarkerID;
 
-	private ArrayList<TMapPoint> m_tmapPoint = new ArrayList<>();
-	private ArrayList<MapPoint2> m_mapPoint2 = new ArrayList<>();
+	//private ArrayList<TMapPoint> m_tmapPoint = new ArrayList<>();
+	//private ArrayList<MapPoint2> m_mapPoint2 = new ArrayList<>();
 
-	private TMapGpsManager tmapgps=null;
 	TMapGpsManager gps = null;
+
+
 
 	@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -174,7 +198,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.main_activity);
 
 		mContext = this;
@@ -189,20 +213,20 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 
 		configureMapView();
-		
+
 		initView();
 		
 		mArrayID = new ArrayList<String>();
-		
+
 		mArrayCircleID = new ArrayList<String>();
 		mCircleID = 0;
-		
+
 		mArrayLineID = new ArrayList<String>();
 		mLineID = 0;
-		
+
 		mArrayPolygonID = new ArrayList<String>();
 		mPolygonID = 0;
-		
+
 		mArrayMarkerID	= new ArrayList<String>();
 		mMarkerID = 0;
 
@@ -214,6 +238,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 				gps.setMinDistance(5);
 				gps.setProvider(gps.GPS_PROVIDER);
 				gps.OpenGps();
+				//TMapPoint pointpresent = gps.getLocation();
 				gps.setProvider(gps.NETWORK_PROVIDER);
 				gps.OpenGps();
 			}
@@ -226,33 +251,56 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 		mMapView.setTMapLogoPosition(TMapLogoPositon.POSITION_BOTTOMRIGHT);
 
-		addPoint();
-		showMarkerPoint();
+		//addPoint();
+
 
 		mMapView.setCompassMode(true);
 		mMapView.setIconVisibility(true);
 
-		tmapgps = new TMapGpsManager(MapActivity.this);
-		tmapgps.setMinTime(1000);
-		tmapgps.setMinDistance(5);
-		tmapgps.OpenGps();
-
 		mMapView.setTrackingMode(true);
 		mMapView.setSightVisible(true);
+		//findAllPoi();
 
 
+		//showMarkerPoint();
 
+		//getLocationPoint();
+		//setLocationPoint();
 
 	}
-	public void addPoint(){
-		m_mapPoint2.add(new MapPoint2("서울시립대학교",37.51035,127.066847));
-	}
+
+	//public void addPoint(){
+
+		//m_mapPoint2.add(new MapPoint2("서울시립대학교",37.51035,127.066847));
+	//}
 
 
-    public void action_click(View v){
-        Intent intent = new Intent(getApplicationContext(), Page4.class);
-        startActivity(intent);
+    public void clicksearch(View v){
+		findAllPoi();
+
+
+		//MaterialTextView Text1 = (MaterialTextView) findViewById(R.id.resultbox);
+		//Text1.setText("서울시립대학교");
+		//TMapPOIItem item1=new TMapPOIItem();
+		//String name1;
+		//String name2;
+		//Intent intent = getIntent();
+		//name2=item1.getPOIName();
+//		name1=intent.getExtras().getString("poiname");
+		//MaterialAutoCompleteTextView textview1 = findViewById(R.id.resultbox);
+		//
+		// textview1.setText(name2);
+
+		//"POI Name: " + item.getPOIName().toString()
+		//Intent intent = new Intent(getApplicationContext(), Page4.class);
+        //startActivity(intent);
     }
+    public void clickTracking(View v){
+		setTrackingMode();
+		getIsTracking();
+		TextInputEditText editText1 = (TextInputEditText)findViewById(R.id.nowPosition);
+		editText1.setText("서울시립대학교") ;
+	}
 
 	/**
 	 * setSKTMapApiKey()에 ApiKey를 입력 한다.
@@ -266,9 +314,12 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 */
 	private void initView() {
 
+		//Button ViewButton = (Button)findViewById(R.id.btnTracking);
+		//ViewButton.setOnClickListener(this);
+
 		//for (int btnMapView : mArrayMapButton) {
-		//	Button ViewButton = (Button)findViewById(btnMapView);
-		//	ViewButton.setOnClickListener(this);
+			//Button ViewButton = (Button)findViewById(btnMapView);
+			//ViewButton.setOnClickListener(this);
 		//}
 
 		mMapView.setOnApiKeyListener(new TMapView.OnApiKeyListenerCallback() {
@@ -378,6 +429,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	@Override
 	public void onClick(View v) {
 		switch(v.getId()) {
+			//case R.id.btnTracking  : 	setTrackingMode();		break;
 		case R.id.btnOverlay		  : 	overlay(); 				break;
 		case R.id.btnAnimateTo		  : 	animateTo(); 			break;
 		case R.id.btnZoomIn			  : 	mapZoomIn(); 			break;
@@ -569,8 +621,8 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
      * 현재위치로 표시될 좌표의 위도, 경도를 반환한다. 
      */
 	public void getLocationPoint() {
-		TMapPoint point = mMapView.getLocationPoint();
-		
+		//TMapPoint point = mMapView.getLocationPoint();
+		TMapPoint point = gps.getLocation();
 		double Latitude = point.getLatitude();
 		double Longitude = point.getLongitude();
 		
@@ -589,12 +641,15 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 * 현재위치로 표시될 좌표의 위도,경도를 설정한다. 
 	 */
 	public void setLocationPoint() {
-		double 	Latitude  = 37.5077664;
-		double  Longitude = 126.8805826;
+		//ouble 	Latitude  = 37.58396081597457;
+		//double  Longitude = 127.05902532617992;
+
+		double Latitude = m_Latitude;
+		double Longitude = m_Longitude;
 		
 		LogManager.printLog("setLocationPoint " + Latitude + " " + Longitude);
 		
-		mMapView.setLocationPoint(Longitude, Latitude);
+		mMapView.setLocationPoint(Latitude, Longitude);
 	}
 	
 	/**
@@ -729,24 +784,30 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 * 지도에 마커를 표출한다. 
 	 */
 	public void showMarkerPoint() {
+		//findAllPoi();
+
 		Bitmap bitmap = null;
-		
-		TMapPoint point = new TMapPoint(37.566474, 126.985022);
-				
+		//getLocationPoint();
+		//setLocationPoint();
+		//TMapPoint point = new TMapPoint(m_Latitude, m_Longitude);
+
+		TMapPoint point = new TMapPoint(37.58395362, 127.05901319);
+		//TMapPoint point = new TMapPoint(37.566474, 126.985022);
 		TMapMarkerItem item1 = new TMapMarkerItem();
 		
 		bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.i_location);
 				
 		item1.setTMapPoint(point);
-		item1.setName("SKT타워");
+		//item1.setName("SKT타워");
+		item1.setName("서울시립대학교");
 		item1.setVisible(item1.VISIBLE);
-	
+
 		item1.setIcon(bitmap);
 		LogManager.printLog("bitmap " + bitmap.getWidth() + " " + bitmap.getHeight());
 		
 		bitmap = BitmapFactory.decodeResource(mContext.getResources(),R.drawable.i_location);		
-		item1.setCalloutTitle("SKT타워");
-		item1.setCalloutSubTitle("을지로입구역 500M");
+		item1.setCalloutTitle("서울시립대학교");
+		item1.setCalloutSubTitle("서울시립대학교 정문");
 		item1.setCanShowCallout(true);
 		item1.setAutoCalloutVisible(true);
 		
@@ -758,8 +819,9 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 		
 		mMapView.addMarkerItem(strID, item1);
 		mArrayMarkerID.add(strID);
-		
-		
+		///////////
+
+		///////////////
 		point = new TMapPoint(37.55102510077652, 126.98789834976196);
 		TMapMarkerItem item2 = new TMapMarkerItem();
 
@@ -960,7 +1022,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 * 지도에 시작-종료 점에 대해서 경로를 표시한다. 
 	 */
 	public void drawMapPath() {
-		TMapPoint point1 = mMapView.getCenterPoint();
+		TMapPoint point1 = mMapView.getLocationPoint();
 		TMapPoint point2 = randomTMapPoint();
 		
 		TMapData tmapdata = new TMapData();
@@ -1084,42 +1146,197 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 * findAllPoi
 	 * 통합검색 POI를 요청한다. 
 	 */
-	public void findAllPoi() {		
-		
+	public void findAllPoi() {
+		//final String[] PoiName = new String[1];
+		//final String[] PoiPoint = new String[1];
+
+		//TMapData tmapdata2 = new TMapData();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setTitle("POI 통합 검색");
 
 		final EditText input = new EditText(this);
 		builder.setView(input);
+		//final TextView con1 = new TextView(this);
+		//builder.setView(con1);
 
-		builder.setPositiveButton("확인", new DialogInterface.OnClickListener() { 
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		    	final String strData = input.getText().toString();
-			    TMapData tmapdata = new TMapData();
-			      
-			    tmapdata.findAllPOI(strData, new FindAllPOIListenerCallback() {
+		final ArrayList<String> LIST_POI = new ArrayList<>();
+		final ArrayList<TMapPoint> LIST_POI_pos = new ArrayList<>();
+		final ArrayList<String> LIST_navi = new ArrayList<>();
+		final ArrayList<TMapPoint> LIST_navi_pos = new ArrayList<>();
+
+		builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				final String strData = input.getText().toString();
+				TMapData tmapdata = new TMapData();
+
+				tmapdata.findAllPOI(strData, new FindAllPOIListenerCallback() {
 					@Override
 					public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
 						for (int i = 0; i < poiItem.size(); i++) {
-			        		TMapPOIItem  item = poiItem.get(i);
-			        				        		        
-			        		LogManager.printLog("POI Name: " + item.getPOIName().toString() + ", " + 
-			        				            "Address: " + item.getPOIAddress().replace("null", "")  + ", " + 
-			        				            "Point: " + item.getPOIPoint().toString());
-			        	}
+							TMapPOIItem item = poiItem.get(i);
+							//PoiName[i] = item.getPOIName().toString();
+							//PoiPoint[i] =item.getPOIPoint().toString();
+							//con1.setText(item.getPOIName());
+
+							//MaterialTextView textview1 = (MaterialTextView) findViewById(R.id.resultbox);
+							//textview1.setText(item.getPOIName());
+
+							LIST_POI.add(item.getPOIName());
+							LIST_POI_pos.add(item.getPOIPoint());
+
+							//Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+							//intent.putExtra("poiname",item.getPOIName());
+
+							LogManager.printLog("POI Name: " + item.getPOIName().toString() + ", " +
+									"Address: " + item.getPOIAddress().replace("null", "") + ", " +
+									"Point: " + item.getPOIPoint().toString());
+						}
+
 					}
 				});
-		    }
-		});
-		builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-		    @Override
-		    public void onClick(DialogInterface dialog, int which) {
-		        dialog.cancel();
-		    }
+
+
+				dialog.cancel();
+
+			}
+		}).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+
+				dialog.cancel();
+			}
 		});
 
-		builder.show();		
+		//builder.setView(con1);
+
+		builder.show();
+		final int isrightpath =0;
+
+		//listview로 데이터 보이기
+		Context context = getApplicationContext();
+		ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1, LIST_POI);
+		//ArrayAdapter adapter2 = new ArrayAdapter(context, android.R.layout.simple_list_item_1, LIST_navi);
+		//ArrayAdapter adapter = new ArrayAdapter(context, android.R.layout.simple_list_item_1,LIST_POI);
+		final ListView listview = (ListView) findViewById(R.id.list_poi);
+		//final ListView listview2 = (ListView) findViewById(R.id.list_navi);
+		listview.setAdapter(adapter);
+		//listview2.setAdapter(adapter2);
+		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				//while(isrightpath==0){
+
+				// get TextView's Text.
+				String strText = (String) parent.getItemAtPosition(position);
+				TextInputEditText editText2 = (TextInputEditText) findViewById(R.id.toPosition);
+				editText2.setText(strText);
+
+				TMapPoint point = LIST_POI_pos.get(LIST_POI.indexOf(strText));
+
+				Bitmap bitmap = null;
+				TMapMarkerItem item1 = new TMapMarkerItem();
+				bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
+
+				item1.setTMapPoint(point);
+				item1.setName(strText);
+				item1.setVisible(item1.VISIBLE);
+
+				item1.setIcon(bitmap);
+				LogManager.printLog("bitmap " + bitmap.getWidth() + " " + bitmap.getHeight());
+
+				bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
+				item1.setCalloutTitle(strText);
+				item1.setCalloutSubTitle(point.toString());
+				item1.setCanShowCallout(true);
+				item1.setAutoCalloutVisible(true);
+
+				Bitmap bitmap_i = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_go);
+				item1.setCalloutRightButtonImage(bitmap_i);
+				String strID = String.format("pmarker%d", mMarkerID++);
+				mMapView.addMarkerItem(strID, item1);
+				mArrayMarkerID.add(strID);
+
+				// TODO : use strText
+
+				TMapPoint point1 = mMapView.getCenterPoint();
+				TMapPoint point2 = point;
+
+				TMapData tmapdata = new TMapData();
+
+
+				tmapdata.findPathDataAll(point1, point2, new FindPathDataAllListenerCallback() {
+					@Override
+					public void onFindPathDataAll(Document doc) {
+						LogManager.printLog("onFindPathDataAll: " + doc);
+						Element root = doc.getDocumentElement();
+						//루트의 자식노드값 가져오기
+						NodeList all = root.getChildNodes();
+						Node node = all.item(1);
+						NodeList all2 = node.getChildNodes();
+
+						for (int i = 0; i < all2.getLength(); i++) {
+							Node node2 = all2.item(i);
+							//System.out.println("자식노드수 : " + all2.getLength());
+							//System.out.println("자식노드 : " + node2.getNodeName());
+							//System.out.println("자식노드타입 : " + node2.getNodeType());
+							if (node2.getNodeType() == 1) {
+								//System.out.println("노드 값 : " + node2.getTextContent());
+								NodeList all3 = node2.getChildNodes();
+								for (int j = 0; j < all3.getLength(); j++) {
+									Node node3 = all3.item(j);
+									//System.out.println("노드이름 : " + node3.getNodeName());
+									if (j == 7) {
+										System.out.println("노드 값 : " + node3.getTextContent());
+										LIST_navi.add(node3.getTextContent());
+									}
+									System.out.println("노드 값 : " +j+ node3.getTextContent());
+									//System.out.println("자식노드 : " + node3.getNodeName());
+									//System.out.println("자식노드타입 : " + node3.getNodeType());
+									//System.out.println("노드 값 : " + node3.getTextContent());
+								}
+							}
+						}
+						MaterialTextView textview1 = findViewById(R.id.text_navi);
+						for (int k = 0; k < LIST_navi.size(); k++) {
+							System.out.println("리스트값: " + LIST_navi.get(k));
+							textview1.setText(k + ". " + LIST_navi.get(k));
+							try {
+								Thread.sleep(500);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						}
+						//System.out.println(LIST_navi.get(LIST_navi.size()-1));
+						if (LIST_navi.get(LIST_navi.size() - 1).equals("도착")) {
+							//System.out.println(LIST_navi.get(LIST_navi.size()-1));
+							System.out.println("여기서 끝");
+							//isrightpath==1;
+						} else {
+							System.out.println("error");
+						}
+					}
+				});
+
+				tmapdata.findPathDataWithType(TMapPathType.CAR_PATH, point1, point2, new FindPathDataListenerCallback() {
+					@Override
+					public void onFindPathData(TMapPolyLine polyLine) {
+						mMapView.addTMapPath(polyLine);
+					}
+				});
+				//Intent intent = new Intent(getApplicationContext(), Page4.class);
+				//intent.putExtra("description",LIST_navi);
+				//startActivity(intent);
+				}
+			//}
+
+		});
+
+		//Context context = getApplicationContext();
+		//ArrayAdapter adapter2 = new ArrayAdapter(context, android.R.layout.simple_list_item_1, LIST_navi);
+		//final ListView listview2 = (ListView) findViewById(R.id.list_navi);
+		//listview2.setAdapter(adapter2);
+
 
 	}
 	
