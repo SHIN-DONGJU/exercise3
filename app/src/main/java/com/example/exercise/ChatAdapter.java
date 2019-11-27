@@ -74,17 +74,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
         holder.TextView_nickname.setText(chat.getNickname());
         holder.TextView_msg.setText(chat.getMsg());
 
-        if(mType.equals("Customer") ) { //손님로그인
+        if(mType.equals("손님") ) { //손님로그인
             if(chat.getNickname().equals(this.myNickName)) { //손님 chat
                 holder.ImageView_left.setVisibility(View.INVISIBLE);
                 holder.TextView_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                 holder.TextView_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
-                holder.ImageView_right.setImageResource(R.drawable.ml_logo_gray);
+                holder.ImageView_right.setImageResource(R.drawable.chat_icon_cm);
             }
             else {//기사 chat
                 holder.ImageView_right.setVisibility(View.INVISIBLE);
                 holder.TextView_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
                 holder.TextView_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+                holder.ImageView_left.setImageResource(R.drawable.logo_yellow_shadow);
             }
 
         }
@@ -93,13 +94,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MyViewHolder> 
                 holder.ImageView_right.setVisibility(View.INVISIBLE);
                 holder.TextView_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
                 holder.TextView_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
-                holder.ImageView_left.setImageResource(R.drawable.logo_brown);
+                holder.ImageView_left.setImageResource(R.drawable.chat_icon_cm);
 
             }
             else {//기사 chat
                 holder.ImageView_left.setVisibility(View.INVISIBLE);
                 holder.TextView_msg.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
                 holder.TextView_nickname.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+                holder.ImageView_right.setImageResource(R.drawable.logo_yellow_shadow);
             }
         }
 

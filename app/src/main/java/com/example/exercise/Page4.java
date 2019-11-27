@@ -15,9 +15,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.exercise.ui.MapActivity;
+
 import java.util.ArrayList;
 
-public class Page4 extends AppCompatActivity implements RecyclerViewAdapterCallback {
+public class Page4 extends AppCompatActivity  {
 
     private EditText editText;
     private RecyclerView recyclerView;
@@ -36,13 +38,19 @@ public class Page4 extends AppCompatActivity implements RecyclerViewAdapterCallb
         //System.out.println("page4에서" + LISTNAVI.get(0));
 
         setContentView(R.layout.activity_page4);
-        layoutInit();
+        //layoutInit();
 
 
     }
 
+    public void clickwarnging (View v){
+        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+        //intent.putExtra("description",LIST_navi);
+        startActivity(intent);
 
+    }
 
+/*
     @Override
     public void showToast(int position) {
         Toast.makeText(this, position + " clicked.", Toast.LENGTH_SHORT).show();
@@ -85,4 +93,7 @@ public class Page4 extends AppCompatActivity implements RecyclerViewAdapterCallb
 
         adapter.setCallback(this);
     }
+
+ */
+
 }

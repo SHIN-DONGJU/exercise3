@@ -22,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -65,6 +67,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 import org.xml.sax.InputSource;
 
 import java.io.File;
@@ -298,8 +301,9 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
     public void clickTracking(View v){
 		setTrackingMode();
 		getIsTracking();
-		TextInputEditText editText1 = (TextInputEditText)findViewById(R.id.nowPosition);
-		editText1.setText("서울시립대학교") ;
+		convertToAddress();
+		//TextInputEditText editText1 = (TextInputEditText)findViewById(R.id.nowPosition);
+		//editText1.setText("서울시립대학교") ;
 	}
 
 	/**
@@ -707,7 +711,8 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 	 */
 	public void getIsTracking() {
 		Boolean bIsTracking = mMapView.getIsTracking();
-		Common.showAlertDialog(this, "", "현재 트래킹모드 사용 여부  : " + bIsTracking.toString() );
+		LogManager.printLog("현재 트래킹모드 사용 여부  : " + bIsTracking.toString());
+		//Common.showAlertDialog(this, "", "현재 트래킹모드 사용 여부  : " + bIsTracking.toString() );
 	}
 	
 	/**
@@ -1152,7 +1157,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 		//TMapData tmapdata2 = new TMapData();
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle("POI 통합 검색");
+		builder.setTitle("목적지 검색");
 
 		final EditText input = new EditText(this);
 		builder.setView(input);
@@ -1211,7 +1216,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 		//builder.setView(con1);
 
 		builder.show();
-		final int isrightpath =0;
+
 
 		//listview로 데이터 보이기
 		Context context = getApplicationContext();
@@ -1224,7 +1229,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 		//listview2.setAdapter(adapter2);
 		listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(final AdapterView<?> parent, final View view, int position, long id) {
 				//while(isrightpath==0){
 
 				// get TextView's Text.
@@ -1234,30 +1239,31 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 				TMapPoint point = LIST_POI_pos.get(LIST_POI.indexOf(strText));
 
-				Bitmap bitmap = null;
+				//Bitmap bitmap = null;
 				TMapMarkerItem item1 = new TMapMarkerItem();
-				bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
+				//bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
 
 				item1.setTMapPoint(point);
 				item1.setName(strText);
 				item1.setVisible(item1.VISIBLE);
 
-				item1.setIcon(bitmap);
-				LogManager.printLog("bitmap " + bitmap.getWidth() + " " + bitmap.getHeight());
+				//item1.setIcon(bitmap);
+				//LogManager.printLog("bitmap " + bitmap.getWidth() + " " + bitmap.getHeight());
 
-				bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
+				//bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_location);
 				item1.setCalloutTitle(strText);
 				item1.setCalloutSubTitle(point.toString());
 				item1.setCanShowCallout(true);
 				item1.setAutoCalloutVisible(true);
 
-				Bitmap bitmap_i = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_go);
-				item1.setCalloutRightButtonImage(bitmap_i);
+				//Bitmap bitmap_i = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.i_go);
+				//item1.setCalloutRightButtonImage(bitmap_i);
 				String strID = String.format("pmarker%d", mMarkerID++);
-				mMapView.addMarkerItem(strID, item1);
+				//mMapView.addMarkerItem(strID, item1);
 				mArrayMarkerID.add(strID);
 
 				// TODO : use strText
+
 
 				TMapPoint point1 = mMapView.getCenterPoint();
 				TMapPoint point2 = point;
@@ -1266,8 +1272,10 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 
 				tmapdata.findPathDataAll(point1, point2, new FindPathDataAllListenerCallback() {
+
 					@Override
 					public void onFindPathDataAll(Document doc) {
+						//boolean warning = false;
 						LogManager.printLog("onFindPathDataAll: " + doc);
 						Element root = doc.getDocumentElement();
 						//루트의 자식노드값 가져오기
@@ -1300,13 +1308,46 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 						MaterialTextView textview1 = findViewById(R.id.text_navi);
 						for (int k = 0; k < LIST_navi.size(); k++) {
 							System.out.println("리스트값: " + LIST_navi.get(k));
+							mMapView.setZoomLevel(17);
+							//getCenterPoint();
+							setCompassMode();
+							setSightVisible();
+							//mMapView.getCenterPoint();
 							textview1.setText(k + ". " + LIST_navi.get(k));
+							if(k==6){
+								Intent intent = new Intent(getApplicationContext(), Page4.class);
+								//intent.putExtra("description",LIST_navi);
+								startActivity(intent);
+								//System.out.println("k=6되었음");
+								//textview1.setText(" 경로를 이탈하였습니다. " );
+								//textview1.setTextSize(30);
+								//getLocationPoint();
+								//naviGuide();
+								//LinearLayout baseview = findViewById(R.id.baseview);
+
+								//ImageView warnning = findViewById(R.id.warning);
+								//ListView list2 = findViewById(R.id.list_poi);
+								//list2.addFooterView(warnning);
+								//AlertDialog.Builder builder = new AlertDialog.Builder(g);
+								//builder.setTitle("경고");
+								//builder.show();
+								//naviGuide();
+								break;
+
+							}
 							try {
-								Thread.sleep(500);
+								Thread.sleep(5000);
+								//getCenterPoint();
+								setCompassMode();
+								setSightVisible();
+								mMapView.getCenterPoint();
 							} catch (InterruptedException e) {
 								e.printStackTrace();
 							}
 						}
+						//if(warning==true){
+							///System.out.println("break 뛰쳐나옴");
+						//}
 						//System.out.println(LIST_navi.get(LIST_navi.size()-1));
 						if (LIST_navi.get(LIST_navi.size() - 1).equals("도착")) {
 							//System.out.println(LIST_navi.get(LIST_navi.size()-1));
@@ -1314,6 +1355,7 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 							//isrightpath==1;
 						} else {
 							System.out.println("error");
+
 						}
 					}
 				});
@@ -1339,7 +1381,39 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 
 
 	}
-	
+	/*
+	*
+	* Context context = getApplicationContext();
+							AlertDialog.Builder builder = new AlertDialog.Builder(context);
+							builder.setTitle("경고");
+							final ImageView image = new ImageView(context);
+							image.setImageDrawable(getResources().getDrawable(R.drawable.icon_warning_ww));
+							final TextView input = new TextView(context);
+							input.setText("경로를 벗어났습니다. 경로를 재탐색하시려면 화면을 밀어주세요.");
+							builder.setView(input);
+
+							builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									final String strData = input.getText().toString();
+									TMapData tmapdata = new TMapData();
+									tmapdata.findAllPOI(strData, new FindAllPOIListenerCallback() {
+										@Override
+										public void onFindAllPOI(ArrayList<TMapPOIItem> poiItem) {
+										}
+									});
+									dialog.cancel();
+								}
+							}).setNegativeButton("취소", new DialogInterface.OnClickListener() {
+								@Override
+								public void onClick(DialogInterface dialog, int which) {
+									dialog.cancel();
+								}
+							});
+							//builder.setView(con1);
+							builder.show();
+	*
+	* */
 	
 	/**
 	 * convertToAddress
@@ -1355,6 +1429,8 @@ public class MapActivity extends BaseActivity implements onLocationChangedCallba
 				@Override
 				public void onConvertToGPSToAddress(String strAddress) {
 					LogManager.printLog("선택한 위치의 주소는 " + strAddress);
+					TextInputEditText editText1 = (TextInputEditText)findViewById(R.id.nowPosition);
+					editText1.setText(strAddress) ;
 				}
 			});
 

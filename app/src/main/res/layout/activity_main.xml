@@ -15,7 +15,8 @@
         android:layout_height="200dp"
         android:layout_marginTop="180dp"
         android:scaleType="fitCenter"
-        app:srcCompat="@drawable/logo_text_pink" />
+        android:src="@drawable/logo_icon_indi"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +43,9 @@
             android:text="@string/login"
             android:textColor="@color/colorSecondary"
             android:textSize="30sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"

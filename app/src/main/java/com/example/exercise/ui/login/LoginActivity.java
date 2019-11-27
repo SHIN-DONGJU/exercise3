@@ -56,7 +56,7 @@ public class LoginActivity extends AppCompatActivity {
 
         //데이터
         List<String> data = new ArrayList<>();
-        data.add(0,"Customer"); data.add(1,"Driver");
+        data.add(0,"손님"); data.add(1,"기사님");
 
         //UI생성
         spinner = findViewById(R.id.user_spinner);
