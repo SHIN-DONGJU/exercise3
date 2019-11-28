@@ -26,8 +26,13 @@
             android:layout_height="match_parent"
             android:layout_weight="1"/>
         <Button
-            android:id="@+id/Button_send"
-            android:text="SEND"
+        android:id="@+id/Button_send"
+        android:text="SEND"
+        android:layout_width="80dp"
+        android:layout_height="match_parent" />
+        <Button
+            android:id="@+id/Button_send2"
+            android:text="음성     인식"
             android:layout_width="80dp"
             android:layout_height="match_parent" />
     </LinearLayout>
